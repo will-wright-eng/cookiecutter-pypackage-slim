@@ -4,7 +4,7 @@
     'GNU GPL v3.0': 'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
     'Apache Software License 2.0': 'License :: OSI Approved :: Apache Software License',
 } -%}
-
+{%- set python_version_splitted = cookiecutter.minimal_python_version.split('.') | map('int') | list -%}
 # Poetry pyproject.toml: https://python-poetry.org/docs/pyproject/
 [build-system]
 requires = ["poetry_core>=1.0.0"]
@@ -32,11 +32,12 @@ classifiers = [  #! Update me
   "Topic :: Software Development :: Libraries :: Python Modules",
   "{{ license_classifiers[cookiecutter.license] }}",
   "Programming Language :: Python :: 3",
-  "Programming Language :: Python :: 3.9",
+  {%- for minor_version in cookiecutter._all_python_minor_version if minor_version >= python_version_splitted[1] %}
+  "Programming Language :: Python :: 3.{{ minor_version }}",{% endfor %}
 ]
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^{{ cookiecutter.minimal_python_version }}"
 black = {version = "^21.10b0", allow-prereleases = true, optional = true}
 isort = {extras = ["colors"], version = "^5.10.1", optional = true}
 flake8  = { version = "^3.9.2", optional = true}
@@ -75,8 +76,8 @@ test = [
 
 dev = ["tox", "pre-commit", "virtualenv", "pip", "twine", "toml", "bump2version"]
 
-[tool.black]
 # https://github.com/psf/black
+[tool.black]
 target-version = ["py{{ cookiecutter.minimal_python_version.replace('.', '') }}"]
 line-length = {{ cookiecutter.line_length }}
 color = true
@@ -97,9 +98,9 @@ exclude = '''
 )/
 '''
 
-[tool.isort]
 # https://github.com/timothycrosley/isort/
-py_version = 39
+[tool.isort]
+py_version = {{ cookiecutter.minimal_python_version.replace('.', '') }}
 line_length = {{ cookiecutter.line_length }}
 
 known_typing = ["typing", "types", "typing_extensions", "mypy", "mypy_extensions"]
@@ -110,9 +111,9 @@ multi_line_output = 3
 indent = 4
 color_output = true
 
-[tool.mypy]
 # https://mypy.readthedocs.io/en/latest/config_file.html#using-a-pyproject-toml-file
-python_version = 3.9
+[tool.mypy]
+python_version = {{ cookiecutter.minimal_python_version }}
 pretty = true
 show_traceback = true
 color_output = true
