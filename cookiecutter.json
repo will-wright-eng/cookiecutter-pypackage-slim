@@ -3,7 +3,7 @@
   "project_description": "Awesome `{{ cookiecutter.project_name.lower().replace(' ', '-') }}` is a Python cli/package created with https://github.com/william-cass-wright/cookiecutter-pypackage-slim",
   "organization": "{{ cookiecutter.project_name.lower().replace(' ', '-') }}",
   "license": ["MIT", "BSD-3", "GNU GPL v3.0", "Apache Software License 2.0"],
-  "_all_python_minor_version": [9],
+  "_all_python_minor_version": [9, 10],
   "minimal_python_version": [3.9, 3.10],
   "full_name": "Will Wright",
   "github_name": "william-cass-wright",
